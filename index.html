@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Notification web app</h1>
+    <button onclick="subscribe()">Notification</button>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js').then(function (registration) {
+                    // Registration was successful
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    console.log(registration);
+                }, function (err) {
+                    // registration failed :(
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+
+        function notifyMe() {
+            if (!("Notification" in window)) {
+                console.log("Este navegador no es compatible con las notificaciones de escritorio");
+            }
+
+            else if (Notification.permission === "granted") {
+                // Si es correcto, lanzamos una notificación
+                let notification = new Notification("Hola!");
+            }
+
+            else if (Notification.permission !== 'denied' || Notification.permission === "default") {
+                Notification.requestPermission(function (permission) {
+                    // Si el usuario nos lo concede, creamos la notificación
+                    if (permission === "granted") {
+                        let notification = new Notification("Hola!");
+                    }
+                });
+            }
+
+        }
+
+        async function subscribe() {
+            await notifyMe();
+            let sw = await navigator.serviceWorker.ready;
+            let push = await sw.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: "BHc-j9uPncO47wJJwaRgkAPr3waDPGmZ9zBZTpjquNLTyzxMrf8kmnip3QSJ5gLwtLnKrtXUFCgy3Fvk8brn9BU"
+            })
+            console.log(JSON.stringify(push));
+        }
+    </script>
+
+    <script src="js.js"></script>
+</body>
+
+</html>

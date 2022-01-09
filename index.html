@@ -13,6 +13,11 @@
     <button onclick="subscribe()">Notification</button>
 
     <script>
+
+        Notification.requestPermission(function (status) {
+            console.log('Notification permission status:', status);
+        });
+
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
                 navigator.serviceWorker.register('/sw.js').then(function (registration) {
@@ -33,19 +38,20 @@
 
             else if (Notification.permission === "granted") {
                 // Si es correcto, lanzamos una notificación
-                let notification = new Notification("Hola!");
+                //let notification = new Notification("Hola!");
             }
 
             else if (Notification.permission !== 'denied' || Notification.permission === "default") {
                 Notification.requestPermission(function (permission) {
                     // Si el usuario nos lo concede, creamos la notificación
-                    if (permission === "granted") {
+                    /*if (permission === "granted") {
                         let notification = new Notification("Hola!");
-                    }
+                    }*/
                 });
             }
 
         }
+
 
         async function subscribe() {
             await notifyMe();
@@ -55,10 +61,10 @@
                 applicationServerKey: "BHc-j9uPncO47wJJwaRgkAPr3waDPGmZ9zBZTpjquNLTyzxMrf8kmnip3QSJ5gLwtLnKrtXUFCgy3Fvk8brn9BU"
             })
             console.log(JSON.stringify(push));
+
         }
     </script>
 
-    <script src="js.js"></script>
 </body>
 
 </html>

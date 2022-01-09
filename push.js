@@ -1,3 +1,4 @@
+
 let push = require("web-push");
 
 let vapidKeys = {
@@ -17,3 +18,4 @@ let sub = {
 };
 
 push.sendNotification(sub, "test message");
+
